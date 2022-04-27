@@ -13,10 +13,10 @@
         android:layout_height="@dimen/post_avatar_size"
         android:layout_marginBottom="@dimen/common_spacing"
         android:contentDescription="@string/avatar_description"
+        android:src="@drawable/ic_netology_48dp"
         app:layout_constraintBottom_toBottomOf="@id/barrier"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_netology_48dp"
         tools:srcCompat="@sample/posts.json/data/authorAvatar" />
 
     <TextView
