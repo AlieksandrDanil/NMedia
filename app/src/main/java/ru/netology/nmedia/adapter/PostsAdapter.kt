@@ -52,22 +52,11 @@ class PostViewHolder(
 //                like.setImageResource(R.drawable.ic_liked_24)
 //            }
 
-            binding.root.setOnClickListener {
-                Log.d("stuff", "stuff")
-            }
-            binding.avatar.setOnClickListener {
-                Log.d("stuff", "avatar")
-            }
             favorite.setOnClickListener {
-                Log.d("stuff", "like")
                 onInteractionListener.onLike(post)
             }
             share.setOnClickListener {
-                Log.d("stuff", "shared")
                 onInteractionListener.onShare(post)
-            }
-            binding.visibility.setOnClickListener {
-                Log.d("stuff", "viewed")
             }
         }
     }
