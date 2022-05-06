@@ -2,7 +2,6 @@ package ru.netology.nmedia
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.viewmodel.PostViewModel
@@ -29,26 +28,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.root.setOnClickListener {
-            Log.d("stuff", "stuff")
-        }
-
-        binding.avatar.setOnClickListener {
-            Log.d("stuff", "avatar")
-        }
-
         binding.favorite.setOnClickListener {
-            Log.d("stuff", "like")
             viewModel.like()
         }
 
         binding.share.setOnClickListener {
-            Log.d("stuff", "shared")
             viewModel.share()
-        }
-
-        binding.visibility.setOnClickListener {
-            Log.d("stuff", "viewed")
         }
     }
 }
