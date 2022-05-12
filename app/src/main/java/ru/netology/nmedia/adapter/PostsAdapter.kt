@@ -1,8 +1,8 @@
 package ru.netology.nmedia.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +14,8 @@ import ru.netology.nmedia.servicecode.plural
 interface OnInteractionListener {
     fun onLike(post: Post) {}
     fun onShare(post: Post) {}
+    fun onEdit(post: Post) {}
+    fun onRemove(post: Post) {}
 }
 
 class PostsAdapter(
@@ -48,9 +50,26 @@ class PostViewHolder(
             favoriteCount.text = plural(post.likes, 'K', 'M')
             shareCount.text = plural(post.shared, 'K', 'M')
             visibilityCount.text = plural(post.viewed, 'K', 'M')
-//            if (post.likedByMe) {
-//                like.setImageResource(R.drawable.ic_liked_24)
-//            }
+
+            menu.setOnClickListener {
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.options_post)
+                    setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.remove -> {
+                                onInteractionListener.onRemove(post)
+                                true
+                            }
+                            R.id.edit -> {
+                                onInteractionListener.onEdit(post)
+                                true
+                            }
+
+                            else -> false
+                        }
+                    }
+                }.show()
+            }
 
             favorite.setOnClickListener {
                 onInteractionListener.onLike(post)
