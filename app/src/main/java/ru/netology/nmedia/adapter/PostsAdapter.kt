@@ -1,6 +1,7 @@
 package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
@@ -16,6 +17,7 @@ interface OnInteractionListener {
     fun onShare(post: Post) {}
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
+    fun onAdd() {}
 }
 
 class PostsAdapter(
@@ -62,6 +64,10 @@ class PostViewHolder(
                             }
                             R.id.edit -> {
                                 onInteractionListener.onEdit(post)
+                                true
+                            }
+                            R.id.add -> {
+                                onInteractionListener.onAdd()
                                 true
                             }
 

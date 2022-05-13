@@ -35,6 +35,10 @@ class MainActivity : AppCompatActivity() {
             override fun onRemove(post: Post) {
                 viewModel.removeById(post.id)
             }
+
+            override fun onAdd() {
+                binding.group.visibility = View.VISIBLE
+            }
         })
 
         binding.list.adapter = adapter
