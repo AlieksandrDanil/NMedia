@@ -1,6 +1,7 @@
 package ru.netology.nmedia.activity
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
@@ -28,7 +29,20 @@ class IntentHandlerActivity : AppCompatActivity() {
                     .show()
                 return@let
             }
-            // TODO: handle text
+
+            binding.viewFrame.setOnClickListener {
+                if (Uri.parse(text).isHierarchical) {
+                    val intentView = Intent(Intent.ACTION_VIEW, Uri.parse(text))
+                    startActivity(intentView)
+                    finish()
+                } else {
+                    Snackbar.make(binding.root, R.string.error_ref_entry, LENGTH_INDEFINITE)
+                        .setAction(android.R.string.ok) {
+                            finish()
+                        }
+                        .show()
+                }
+            }
         }
     }
 }

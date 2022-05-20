@@ -37,17 +37,9 @@ class MainActivity : AppCompatActivity() {
                 viewModel.likeById(post.id)
             }
 
-//            override fun onShare(post: Post) {
-//                viewModel.shareById(post.id)
-//            }
-
             override fun onRemove(post: Post) {
                 viewModel.removeById(post.id)
             }
-
-//            override fun onAdd() {
-//                binding.group.visibility = View.VISIBLE
-//            }
 
             override fun onShare(post: Post) {
                 val intent = Intent().apply {
@@ -55,10 +47,11 @@ class MainActivity : AppCompatActivity() {
                     putExtra(Intent.EXTRA_TEXT, post.content)
                     type = "text/plain"
                 }
-
                 val shareIntent =
                     Intent.createChooser(intent, getString(R.string.chooser_share_post))
                 startActivity(shareIntent)
+
+                viewModel.shareById(post.id)
             }
         })
 
@@ -77,47 +70,5 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             newPostLauncher.launch()
         }
-
-//        viewModel.edited.observe(this) { post ->
-//            if (post.id == 0L) {
-//                return@observe
-//            }
-//            with(binding.content) {
-//                requestFocus()
-//                setText(post.content)
-//            }
-//            binding.group.visibility = View.VISIBLE
-//        }
-//
-//        binding.save.setOnClickListener {
-//            with(binding.content) {
-//                if (text.isNullOrBlank()) {
-//                    Toast.makeText(
-//                        this@MainActivity,
-//                        context.getString(R.string.error_empty_content),
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                    return@setOnClickListener
-//                }
-//
-//                viewModel.changeContent(text.toString())
-//                viewModel.save()
-//
-//                setText("")
-//                clearFocus()
-//                AndroidUtils.hideKeyboard(this)
-//            }
-//            binding.group.visibility = View.GONE
-//        }
-//
-//        binding.cancel.setOnClickListener {
-//            with(binding.content) {
-//                text.clear()
-//                setText("")
-//                clearFocus()
-//                AndroidUtils.hideKeyboard(this)
-//            }
-//            binding.group.visibility = View.GONE
-//        }
     }
 }
