@@ -3,6 +3,7 @@ package ru.netology.nmedia.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ interface OnInteractionListener {
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
     fun onAdd() {}
+    fun onPlayVideo(post: Post)
 }
 
 class PostsAdapter(
@@ -49,13 +51,7 @@ class PostViewHolder(
             favorite.text = plural(post.likes, 'K', 'M')
             share.text = plural(post.shared, 'K', 'M')
             visibility.text = plural(post.viewed, 'K', 'M')
-
-//            favorite.setImageResource(
-//                if (post.likedByMe) R.drawable.ic_favorite_24dp_red else R.drawable.ic_favorite_24dp
-//            )
-//            favoriteCount.text = plural(post.likes, 'K', 'M')
-//            shareCount.text = plural(post.shared, 'K', 'M')
-//            visibilityCount.text = plural(post.viewed, 'K', 'M')
+            videoBanner.isVisible = post.video != null
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
@@ -85,6 +81,9 @@ class PostViewHolder(
             }
             share.setOnClickListener {
                 onInteractionListener.onShare(post)
+            }
+            videoBanner.setOnClickListener {
+                onInteractionListener.onPlayVideo(post)
             }
         }
     }

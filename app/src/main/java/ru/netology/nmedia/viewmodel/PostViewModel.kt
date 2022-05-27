@@ -19,6 +19,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     val data = repository.getAll()
     val edited = MutableLiveData(empty)
 
+    //val playVideo = SingleLiveEvent<String>()
+
     fun save() {
         edited.value?.let {
             repository.save(it)
@@ -41,4 +43,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     fun likeById(id: Long) = repository.likeById(id)
     fun shareById(id: Long) = repository.shareById(id)
     fun removeById(id: Long) = repository.removeById(id)
+//    fun playVideo(post: Post) {
+//        val url = requireNotNull(post.video)
+//        playVideo.value = url
+//    }
 }
