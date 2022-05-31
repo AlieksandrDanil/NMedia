@@ -161,14 +161,13 @@ class PostRepositoryFileImpl(
             // remove hardcoded author & published
             posts = listOf(
                 post.copy(
-                    id = nextId++,
+                    id = posts.maxOfOrNull { it.id + 1 } ?: nextId,
                     author = "Me",
                     likedByMe = false,
                     published = "now"
                 )
             ) + posts
             data.value = posts
-            dataPost.value = post
             sync()
             return
         }
@@ -177,7 +176,6 @@ class PostRepositoryFileImpl(
             if (it.id != post.id) it else it.copy(content = post.content)
         }
         data.value = posts
-        dataPost.value = post
         sync()
     }
 
