@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia.R
+import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.adapter.*
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
@@ -21,7 +22,7 @@ import ru.netology.nmedia.viewmodel.PostViewModel
 class PostCardFragment : Fragment() {
 
     companion object {
-        var Bundle.textArg: String? by StringArg
+        var Bundle.idArg: String? by StringArg
     }
 
     private val viewModel: PostViewModel by viewModels(
@@ -39,7 +40,7 @@ class PostCardFragment : Fragment() {
             false
         )
 
-        arguments?.textArg?.let {
+        arguments?.idArg?.let {
             viewModel.getPostById(it.toLong())
         }?.let { post ->
 
@@ -110,11 +111,6 @@ class PostCardFragment : Fragment() {
                             .show()
                     }
                 }
-            }
-            with(binding) {
-                favorite.isCheckable = true
-                favorite.isClickable = true
-                share.isClickable = true
             }
 
             postBinding(post, binding, onInteractionListener)
