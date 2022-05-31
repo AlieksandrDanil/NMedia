@@ -124,6 +124,15 @@ class PostRepositoryFileImpl(
     private var posts = postsFilled //emptyList<Post>()
     private val data = MutableLiveData(posts)
 
+    private val empty = Post(
+        id = 0,
+        content = "",
+        author = "",
+        likedByMe = false,
+        published = ""
+    )
+    private val dataPost = MutableLiveData(empty)
+
     init {
         //sync()   // для первоначальной записи первых постов
         val file = context.filesDir.resolve(filename)
@@ -139,6 +148,14 @@ class PostRepositoryFileImpl(
 
     override fun getAll(): LiveData<List<Post>> = data
 
+    override fun getPost(): LiveData<Post> = dataPost
+    override fun getPostById(id: Long): Post? {
+        dataPost.value = posts.find {
+            it.id == id
+        }
+        return dataPost.value
+    }
+
     override fun save(post: Post) {
         if (post.id == 0L) {
             // remove hardcoded author & published
@@ -151,6 +168,7 @@ class PostRepositoryFileImpl(
                 )
             ) + posts
             data.value = posts
+            dataPost.value = post
             sync()
             return
         }
@@ -159,6 +177,7 @@ class PostRepositoryFileImpl(
             if (it.id != post.id) it else it.copy(content = post.content)
         }
         data.value = posts
+        dataPost.value = post
         sync()
     }
 
@@ -170,6 +189,7 @@ class PostRepositoryFileImpl(
             )
         }
         data.value = posts
+        getPostById(id)
         sync()
     }
 
@@ -181,6 +201,7 @@ class PostRepositoryFileImpl(
                 it.copy(shared = it.shared + 1)
         }
         data.value = posts
+        getPostById(id)
         sync()
     }
 

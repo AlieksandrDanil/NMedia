@@ -19,6 +19,7 @@ interface OnInteractionListener {
     fun onRemove(post: Post) {}
     fun onAdd() {}
     fun onPlayVideo(post: Post)
+    fun onContent(post: Post)
 }
 
 class PostsAdapter(
@@ -43,48 +44,58 @@ class PostViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(post: Post) {
-        binding.apply {
-            author.text = post.author
-            published.text = post.published
-            content.text = post.content
-            favorite.isChecked = post.likedByMe
-            favorite.text = plural(post.likes, 'K', 'M')
-            share.text = plural(post.shared, 'K', 'M')
-            visibility.text = plural(post.viewed, 'K', 'M')
-            videoBanner.isVisible = post.video != null
+        postBinding(post, binding, onInteractionListener)
+    }
+}
 
-            menu.setOnClickListener {
-                PopupMenu(it.context, it).apply {
-                    inflate(R.menu.options_post)
-                    setOnMenuItemClickListener { item ->
-                        when (item.itemId) {
-                            R.id.remove -> {
-                                onInteractionListener.onRemove(post)
-                                true
-                            }
-                            R.id.edit -> {
-                                onInteractionListener.onEdit(post)
-                                true
-                            }
-                            R.id.add -> {
-                                onInteractionListener.onAdd()
-                                true
-                            }
-                            else -> false
+fun postBinding(
+    post: Post,
+    binding: CardPostBinding,
+    onInteractionListener: OnInteractionListener
+) {
+    binding.apply {
+        author.text = post.author
+        published.text = post.published
+        content.text = post.content
+        favorite.isChecked = post.likedByMe
+        favorite.text = plural(post.likes, 'K', 'M')
+        share.text = plural(post.shared, 'K', 'M')
+        visibility.text = plural(post.viewed, 'K', 'M')
+        videoBanner.isVisible = post.video != null
+
+        menu.setOnClickListener {
+            PopupMenu(it.context, it).apply {
+                inflate(R.menu.options_post)
+                setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.remove -> {
+                            onInteractionListener.onRemove(post)
+                            true
                         }
+                        R.id.edit -> {
+                            onInteractionListener.onEdit(post)
+                            true
+                        }
+                        R.id.add -> {
+                            onInteractionListener.onAdd()
+                            true
+                        }
+                        else -> false
                     }
-                }.show()
-            }
-
-            favorite.setOnClickListener {
-                onInteractionListener.onLike(post)
-            }
-            share.setOnClickListener {
-                onInteractionListener.onShare(post)
-            }
-            videoBanner.setOnClickListener {
-                onInteractionListener.onPlayVideo(post)
-            }
+                }
+            }.show()
+        }
+        content.setOnClickListener() {
+            onInteractionListener.onContent(post)
+        }
+        favorite.setOnClickListener {
+            onInteractionListener.onLike(post)
+        }
+        share.setOnClickListener {
+            onInteractionListener.onShare(post)
+        }
+        videoBanner.setOnClickListener {
+            onInteractionListener.onPlayVideo(post)
         }
     }
 }

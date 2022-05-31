@@ -1,15 +1,15 @@
 package ru.netology.nmedia.activity
 
-//import androidx.activity.result.launch
-//import androidx.activity.viewModels
-import android.net.Uri
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewManager
+import android.widget.PopupMenu
+import androidx.core.graphics.component1
+import androidx.core.graphics.component2
+import androidx.core.graphics.component3
+import androidx.core.graphics.component4
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -27,6 +27,14 @@ class FeedFragment : Fragment() {
         ownerProducer = ::requireParentFragment
     )
 
+    private fun toPostCardFragment(post: Post) =
+        findNavController().navigate(
+            R.id.action_feedFragment_to_postCardFragment,
+            Bundle().apply {
+                textArg = post.id.toString()
+            }
+        )
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,73 +46,17 @@ class FeedFragment : Fragment() {
             false
         )
 
-//        setContentView(binding.root)
-
-//        val viewModel: PostViewModel by viewModels()
-
         val adapter = PostsAdapter(object : OnInteractionListener {
-//            private val editPostLauncher =
-//                registerForActivityResult(NewPostFragment.EditPostResultContract) { result ->
-//                    result ?: return@registerForActivityResult
-//                    viewModel.changeContent(result)
-//                    viewModel.save()
-//                }
-
+            override fun onContent(post: Post) {
+                toPostCardFragment(post)
+            }
             override fun onEdit(post: Post) {
-                viewModel.edit(post)
-//                editPostLauncher.launch(post.content)
-
-                findNavController().navigate(
-                    R.id.action_feedFragment_to_newPostFragment,
-                    Bundle().apply {
-                        textArg = post.content
-                    }
-                )
+                toPostCardFragment(post)
             }
-
-            override fun onLike(post: Post) {
-                viewModel.likeById(post.id)
-            }
-
-            override fun onRemove(post: Post) {
-                viewModel.removeById(post.id)
-            }
-
-            override fun onShare(post: Post) {
-                val intent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, post.content)
-                    type = "text/plain"
-                }
-                val shareIntent =
-                    Intent.createChooser(intent, getString(R.string.chooser_share_post))
-                startActivity(shareIntent)
-
-                viewModel.shareById(post.id)
-            }
-
-            override fun onPlayVideo(post: Post) {
-                if (Uri.parse(post.video).isHierarchical) {
-                    //val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.video))
-                    val intent = Intent().apply {
-                        action = Intent.ACTION_VIEW
-                        setDataAndType(Uri.parse(post.video), "video/*")
-                    }
-                    val shareIntent =
-                        Intent.createChooser(intent, getString(R.string.chooser_share_post))
-                    startActivity(shareIntent)
-
-                } else {
-                    Snackbar.make(
-                        binding.root, R.string.error_ref_entry,
-                        BaseTransientBottomBar.LENGTH_INDEFINITE
-                    )
-                        .setAction(android.R.string.ok) {
-                            findNavController().navigateUp()
-                        }
-                        .show()
-                }
-            }
+            override fun onLike(post: Post) {            }
+            override fun onRemove(post: Post) {}
+            override fun onShare(post: Post) {}
+            override fun onPlayVideo(post: Post) {}
         })
 
         binding.list.adapter = adapter
@@ -112,14 +64,7 @@ class FeedFragment : Fragment() {
             adapter.submitList(posts)
         }
 
-//        val newPostLauncher =
-//            registerForActivityResult(NewPostFragment.NewPostResultContract) { result ->
-//                result ?: return@registerForActivityResult
-//                viewModel.changeContent(result)
-//                viewModel.save()
-//            }
         binding.fab.setOnClickListener {
-//            newPostLauncher.launch()
             findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
         }
 

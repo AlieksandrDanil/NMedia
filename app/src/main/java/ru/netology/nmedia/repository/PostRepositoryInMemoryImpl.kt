@@ -111,7 +111,24 @@ class PostRepositoryInMemoryImpl : PostRepository {
 
     private val data = MutableLiveData(posts)
 
+    private val empty = Post(
+        id = 0,
+        content = "",
+        author = "",
+        likedByMe = false,
+        published = ""
+    )
+    private val dataPost = MutableLiveData(empty)
+
     override fun getAll(): LiveData<List<Post>> = data
+
+    override fun getPost(): LiveData<Post> = dataPost
+    override fun getPostById(id: Long): Post? {
+        dataPost.value = posts.find {
+            it.id == id
+        }
+        return dataPost.value
+    }
 
     override fun save(post: Post) {
         if (post.id == 0L) {
