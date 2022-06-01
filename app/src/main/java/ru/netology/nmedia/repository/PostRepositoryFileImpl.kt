@@ -24,7 +24,8 @@ class PostRepositoryFileImpl(
             likedByMe = false,
             likes = 9_999,
             shared = 1_099,
-            viewed = 2
+            viewed = 2,
+            video = "https://www.youtube.com/watch?v=WhWc3b3KhnY"
         ),
         Post(
             id = nextId++,
@@ -34,7 +35,8 @@ class PostRepositoryFileImpl(
             likedByMe = false,
             likes = 999,
             shared = 1_099, //9_996,
-            viewed = 2_390_480
+            viewed = 2_390_480,
+            video = "With.error:https:www.youtube.com/watch?v=WhWc3b3KhnY"
         ),
         Post(
             id = nextId++,
@@ -44,7 +46,8 @@ class PostRepositoryFileImpl(
             likedByMe = false,
             likes = 999,
             shared = 9_996,
-            viewed = 2_390_480
+            viewed = 2_390_480,
+            video = "https://www.youtube.com/watch?v=WhWc3b3KhnY"
         ),
         Post(
             id = nextId++,
@@ -64,7 +67,8 @@ class PostRepositoryFileImpl(
             likedByMe = false,
             likes = 999,
             shared = 9_996,
-            viewed = 2_390_480
+            viewed = 2_390_480,
+            video = "https://www.youtube.com/watch?v=WhWc3b3KhnY"
         ),
         Post(
             id = nextId++,
@@ -120,6 +124,15 @@ class PostRepositoryFileImpl(
     private var posts = postsFilled //emptyList<Post>()
     private val data = MutableLiveData(posts)
 
+    private val empty = Post(
+        id = 0,
+        content = "",
+        author = "",
+        likedByMe = false,
+        published = ""
+    )
+    private val dataPost = MutableLiveData(empty)
+
     init {
         //sync()   // для первоначальной записи первых постов
         val file = context.filesDir.resolve(filename)
@@ -135,12 +148,20 @@ class PostRepositoryFileImpl(
 
     override fun getAll(): LiveData<List<Post>> = data
 
+    override fun getPost(): LiveData<Post> = dataPost
+    override fun getPostById(id: Long): Post? {
+        dataPost.value = posts.find {
+            it.id == id
+        }
+        return dataPost.value
+    }
+
     override fun save(post: Post) {
         if (post.id == 0L) {
             // remove hardcoded author & published
             posts = listOf(
                 post.copy(
-                    id = nextId++,
+                    id = posts.maxOfOrNull { it.id + 1 } ?: nextId,
                     author = "Me",
                     likedByMe = false,
                     published = "now"
@@ -166,6 +187,7 @@ class PostRepositoryFileImpl(
             )
         }
         data.value = posts
+        getPostById(id)
         sync()
     }
 
@@ -177,6 +199,7 @@ class PostRepositoryFileImpl(
                 it.copy(shared = it.shared + 1)
         }
         data.value = posts
+        getPostById(id)
         sync()
     }
 
