@@ -7,6 +7,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.netology.nmedia.dto.Post
 
+const val DRAFT_POST_ID = 999_999_999_911L
+
 class PostRepositorySharedPrefsImpl(
     context: Context,
 ) : PostRepository {
@@ -34,7 +36,6 @@ class PostRepositorySharedPrefsImpl(
         }
     }
 
-    // для презентации убрали пустые строки
     override fun getAll(): LiveData<List<Post>> = data
 
     override fun getPost(): LiveData<Post> = dataPost
@@ -46,6 +47,21 @@ class PostRepositorySharedPrefsImpl(
     }
 
     override fun save(post: Post) {
+        if (post.id == DRAFT_POST_ID) {
+            posts = listOf(
+                post.copy(
+                    id = post.id,
+                    content = post.content,
+                    author = "Me",
+                    likedByMe = false,
+                    published = "now"
+                )
+            ) + posts
+            data.value = posts
+            sync()
+            return
+        }
+
         if (post.id == 0L) {
             // remove hardcoded author & published
             posts = listOf(
@@ -109,3 +125,5 @@ class PostRepositorySharedPrefsImpl(
         }
     }
 }
+
+fun getConstDraftPostId(): Long = DRAFT_POST_ID
