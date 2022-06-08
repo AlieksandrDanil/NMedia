@@ -1,15 +1,17 @@
-package ru.netology.nmedia.repository
+package ru.netology.nmedia.dto
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import ru.netology.nmedia.dao.PostDao
-import ru.netology.nmedia.dto.Post
-
-class PostRepositorySQLiteImpl(
-    private val dao: PostDao
-) : PostRepository {
+object PostsFilled {
     private var primId = 0L
-    private var postsFilled = listOf(
+
+    val empty = Post(
+        id = 0,
+        content = "",
+        author = "",
+        likedByMe = false,
+        published = ""
+    )
+
+    val postsFilled = listOf(
         Post(
             id = primId,
             author = "Нетология. Университет интернет-профессий будущего",
@@ -114,77 +116,5 @@ class PostRepositorySQLiteImpl(
             shared = 9_996,
             viewed = 2_390_480
         ),
-    ).reversed()
-
-    private var posts = postsFilled // emptyList<Post>()
-    private val data = MutableLiveData(posts)
-
-    private val empty = Post(
-        id = 0,
-        content = "",
-        author = "",
-        likedByMe = false,
-        published = ""
     )
-    private val dataPost = MutableLiveData(empty)
-
-    init {
-        // для первоначальной записи первых постов
-        //for(post in posts) { dao.save(post) }
-        posts = dao.getAll()
-        data.value = posts
-    }
-
-    override fun getAll(): LiveData<List<Post>> = data
-
-    override fun getPost(): LiveData<Post> = dataPost
-    override fun getPostById(id: Long): Post? {
-        dataPost.value = posts.find {
-            it.id == id
-        }
-        return dataPost.value
-    }
-
-    override fun save(post: Post) {
-        val id = post.id
-        val saved = dao.save(post)
-        posts = if (id == 0L) {
-            listOf(saved) + posts
-        } else {
-            posts.map {
-                if (it.id != id) it else saved
-            }
-        }
-        data.value = posts
-    }
-
-    override fun likeById(id: Long) {
-        dao.likeById(id)
-        posts = posts.map {
-            if (it.id != id) it else it.copy(
-                likedByMe = !it.likedByMe,
-                likes = if (it.likedByMe) it.likes - 1 else it.likes + 1
-            )
-        }
-        data.value = posts
-        getPostById(id)
-    }
-
-    override fun shareById(id: Long) {
-        dao.shareById(id)
-        posts = posts.map {
-            if (it.id != id)
-                it
-            else
-                it.copy(shared = it.shared + 1)
-        }
-        data.value = posts
-        getPostById(id)
-    }
-
-    override fun removeById(id: Long) {
-        dao.removeById(id)
-        posts = posts.filter { it.id != id }
-        data.value = posts
-    }
 }
