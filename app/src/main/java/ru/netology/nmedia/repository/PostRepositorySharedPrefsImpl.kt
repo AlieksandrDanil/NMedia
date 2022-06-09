@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.dto.PostsFilled
 
 const val DRAFT_POST_ID = 999_999_999_911L
 
@@ -19,15 +20,7 @@ class PostRepositorySharedPrefsImpl(
     private var nextId = 1L
     private var posts = emptyList<Post>()
     private val data = MutableLiveData(posts)
-
-    private val empty = Post(
-        id = 0,
-        content = "",
-        author = "",
-        likedByMe = false,
-        published = ""
-    )
-    private val dataPost = MutableLiveData(empty)
+    private val dataPost = MutableLiveData(PostsFilled.empty)
 
     init {
         prefs.getString(key, null)?.let {

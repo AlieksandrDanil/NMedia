@@ -4,20 +4,14 @@ import android.app.Application
 import androidx.lifecycle.*
 import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.dto.PostsFilled
 import ru.netology.nmedia.repository.*
 
-private val empty = Post(
-    id = 0,
-    content = "",
-    author = "",
-    likedByMe = false,
-    published = ""
-)
+private val empty = PostsFilled.empty
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
-    //    private val repository: PostRepository = PostRepositoryFileImpl(application)
-    private val repository: PostRepository = PostRepositorySQLiteImpl(
-        AppDb.getInstance(application).postDao
+    private val repository: PostRepository = PostRepositoryImpl(
+        AppDb.getInstance(context =  application).postDao()
     )
     val data = repository.getAll()
     val dataPost = repository.getPost()
@@ -27,6 +21,10 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         edited.value?.let {
             repository.save(it)
         }
+        toEmpty()
+    }
+
+    fun toEmpty() {
         edited.value = empty
     }
 
