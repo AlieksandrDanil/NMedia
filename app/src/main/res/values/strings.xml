@@ -17,4 +17,11 @@
     <string name="chooser_share_post">Share post</string>
     <string name="add_post">Add post</string>
     <string name="save">Save</string>
+    <string name="google_play_unavailable">Google Api Unavailable</string>
+    <string name="notification_user_liked">User %1$s liked %2$s\'s post</string>
+    <string name="notification_user_shared">User %1$s shared with %2$s\'s post</string>
+    <string name="notification_user_new">User %1$s published new %2$s\'s post</string>
+    <string name="channel_remote_name">Server notifications</string>
+    <string name="channel_remote_description">Notifications from remote server</string>
+    <string name="not_existing_action">Not existing action</string>
 </resources>
