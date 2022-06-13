@@ -18,4 +18,11 @@
     <string name="chooser_share_post">Поделиться</string>
     <string name="add_post">Добавить пост</string>
     <string name="save">Сохранить</string>
+    <string name="google_play_unavailable">Google Api Недоступно</string>
+    <string name="notification_user_liked">%1$s поставил(а) лайк посту %2$s</string>
+    <string name="notification_user_shared">%1$s поделил(ся)(ась) постом %2$s</string>
+    <string name="notification_user_new">%1$s опубликовал(а) новый пост %2$s</string>
+    <string name="channel_remote_name">Уведомления с сервера</string>
+    <string name="channel_remote_description">Уведомления с удалённого сервера</string>
+    <string name="not_existing_action">Action не существует</string>
 </resources>

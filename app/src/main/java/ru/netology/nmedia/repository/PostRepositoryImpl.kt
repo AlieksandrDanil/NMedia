@@ -11,20 +11,12 @@ import ru.netology.nmedia.dto.PostsFilled
 class PostRepositoryImpl(
     private val dao: PostDao,
 ) : PostRepository {
-    private var posts = emptyList<Post>() //PostsFilled.postsFilled.reversed()
-    private val data = MutableLiveData(posts)
     private val dataPost = MutableLiveData(PostsFilled.empty)
+    // private var posts = PostsFilled.postsFilled.reversed() //emptyList<Post>()
 
     init {
         // для первоначальной записи первых постов
-        //for(post in posts) { dao.save(PostEntity.fromDto(post)) }
-
-        dao.getInitAll().also { list ->
-            list.map {
-                posts = listOf(it.toDto()) + posts
-            }
-        }
-        data.value = posts
+        // for(post in posts) { dao.save(PostEntity.fromDto(post)) }
     }
 
     override fun getAll() = Transformations.map(dao.getAll()) { list ->

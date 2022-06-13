@@ -8,14 +8,11 @@ import ru.netology.nmedia.entity.PostEntity
 
 @Dao
 interface PostDao {
-    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
-    fun getInitAll(): List<PostEntity>
+    @Query("SELECT * FROM PostEntity WHERE id = :id")
+    fun getById(id: Long): PostEntity
 
     @Query("SELECT * FROM PostEntity ORDER BY id DESC")
     fun getAll(): LiveData<List<PostEntity>>
-
-    @Query("SELECT * FROM PostEntity WHERE id = :id")
-    fun getById(id: Long): PostEntity
 
     @Insert
     fun insert(post: PostEntity)

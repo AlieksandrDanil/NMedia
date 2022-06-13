@@ -42,7 +42,7 @@ class PostCardFragment : Fragment() {
 
         arguments?.idArg?.let {
             viewModel.getPostById(it.toLong())
-        }?.let { post ->
+        }?.let {
 
             val onInteractionListener = object : OnInteractionListener {
                 override fun onContent(post: Post) {
@@ -113,7 +113,7 @@ class PostCardFragment : Fragment() {
                 }
             }
 
-            postBinding(post, binding, onInteractionListener)
+            //postBinding(post, binding, onInteractionListener)
             viewModel.dataPost.observe(viewLifecycleOwner) {
                 postBinding(it, binding, onInteractionListener)
             }
